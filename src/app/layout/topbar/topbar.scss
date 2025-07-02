@@ -1,0 +1,47 @@
+// Topbar styles
+.topbar-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+p-menubar {
+  background: #181f2a !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.12);
+  min-height: 60px;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+}
+
+p-menubar .p-menubar-root-list,
+p-menubar .p-menubar-button {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+.p-menubar-button {
+  background: #232b39 !important;
+  color: #fff !important;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #3a4252;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.p-menubar-button:hover {
+  box-shadow: 0 0 0 3px #3a4252;
+  border-color: #5a6a8a;
+}
+
+p-button .p-button {
+  background: transparent !important;
+  color: #fff !important;
+  border: none !important;
+}

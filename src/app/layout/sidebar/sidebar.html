@@ -1,1 +1,8 @@
-<p>sidebar works!</p>
+<p-sidebar [(visible)]="visible" [baseZIndex]="10000" (onHide)="onHide()">
+  <h3>Menu</h3>
+  <ul class="p-menu-list">
+    <li><button pButton type="button" label="Dashboard" class="p-button-text"></button></li>
+    <li><button pButton type="button" label="Customers" class="p-button-text"></button></li>
+    <li><button pButton type="button" label="Rooms" class="p-button-text"></button></li>
+  </ul>
+</p-sidebar>

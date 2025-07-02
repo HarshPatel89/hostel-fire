@@ -1,1 +1,6 @@
-<p>topbar works!</p>
+<p-menubar [model]="[]">
+  <ng-template pTemplate="start">
+    <button pButton icon="pi pi-bars" (click)="onSidebarToggle()" class="p-button-text p-mr-2" aria-label="Toggle Sidebar"></button>
+    <span class="topbar-title">Hostel Fire</span>
+  </ng-template>
+</p-menubar>

@@ -1,0 +1,28 @@
+// Sidebar styles
+p-sidebar {
+  background: #000 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+p-sidebar h3 {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.p-menu-list {
+  list-style: none;
+  padding: 0;
+}
+
+.p-menu-list li {
+  margin-bottom: 0.5rem;
+}
+
+.p-menu-list button.p-button {
+  background: #222 !important;
+  color: #fff !important;
+  border: none !important;
+  width: 100%;
+  text-align: left;
+}

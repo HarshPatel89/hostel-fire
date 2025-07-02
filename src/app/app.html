@@ -1,1 +1,3 @@
+<app-topbar (sidebarToggle)="showSidebar()"></app-topbar>
+<app-sidebar [visible]="sidebarVisible" [onHide]="hideSidebar.bind(this)"></app-sidebar>
 <router-outlet />
