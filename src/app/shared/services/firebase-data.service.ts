@@ -1,44 +1,52 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore, collection, collectionData, doc, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Room } from '../models/room';
 import { Customer } from '../models/customer';
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseDataService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: Firestore) {}
 
   // Room CRUD
   getRooms(): Observable<Room[]> {
-    return this.firestore.collection<Room>('rooms').valueChanges({ idField: 'id' });
+    const roomsRef = collection(this.firestore, 'rooms');
+    return collectionData(roomsRef, { idField: 'id' }) as Observable<Room[]>;
   }
 
   addRoom(room: Room) {
-    return this.firestore.collection('rooms').add(room);
+    const roomsRef = collection(this.firestore, 'rooms');
+    return addDoc(roomsRef, room);
   }
 
   updateRoom(room: Room) {
-    return this.firestore.collection('rooms').doc(room.id).update(room);
+    const roomDoc = doc(this.firestore, `rooms/${room.id}`);
+    return updateDoc(roomDoc, { ...room });
   }
 
   deleteRoom(id: string) {
-    return this.firestore.collection('rooms').doc(id).delete();
+    const roomDoc = doc(this.firestore, `rooms/${id}`);
+    return deleteDoc(roomDoc);
   }
 
   // Customer CRUD
   getCustomers(): Observable<Customer[]> {
-    return this.firestore.collection<Customer>('customers').valueChanges({ idField: 'id' });
+    const customersRef = collection(this.firestore, 'customers');
+    return collectionData(customersRef, { idField: 'id' }) as Observable<Customer[]>;
   }
 
   addCustomer(customer: Customer) {
-    return this.firestore.collection('customers').add(customer);
+    const customersRef = collection(this.firestore, 'customers');
+    return addDoc(customersRef, customer);
   }
 
   updateCustomer(customer: Customer) {
-    return this.firestore.collection('customers').doc(customer.id).update(customer);
+    const customerDoc = doc(this.firestore, `customers/${customer.id}`);
+    return updateDoc(customerDoc, { ...customer });
   }
 
   deleteCustomer(id: string) {
-    return this.firestore.collection('customers').doc(id).delete();
+    const customerDoc = doc(this.firestore, `customers/${id}`);
+    return deleteDoc(customerDoc);
   }
 }

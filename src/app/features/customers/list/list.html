@@ -1,34 +1,98 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
 <div class="customer-list">
-  <button (click)="addCustomer()">Add Customer</button>
-  <table>
-    <thead>
+  <button pButton type="button" label="Add Customer" icon="pi pi-plus" (click)="openAddDialog()"></button>
+  <p-table
+    [value]="customersList"
+    [paginator]="true"
+    [rows]="10"
+    [responsiveLayout]="'scroll'"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5,10,20]"
+    [tableStyle]="{ 'min-width': '900px' }"
+    class="p-datatable-striped p-datatable-hoverable-rows"
+    emptyMessage="No customers found."
+  >
+    <ng-template pTemplate="caption">
+      <div class="table-caption">Customer List</div>
+    </ng-template>
+    <ng-template pTemplate="header">
       <tr>
         <th>Name</th>
         <th>Phone</th>
         <th>Room</th>
-        <th>Rent</th>
+        <th>Rent (₹)</th>
         <th>Joining Date</th>
         <th>Age</th>
         <th>Address</th>
         <th>Adhaar</th>
-        <th>Actions</th>
+        <th style="width: 120px; text-align: center;">Actions</th>
       </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let customer of customers$ | async">
+    </ng-template>
+    <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+      <tr>
         <td>{{ customer.name }}</td>
         <td>{{ customer.phone }}</td>
         <td>{{ customer.roomNumber }}</td>
-        <td>{{ customer.rent }}</td>
-        <td>{{ customer.joiningDate | date }}</td>
+        <td><span class="rent">₹{{ customer.rent | number:'1.0-0' }}</span></td>
+        <td>{{ customer.joiningDate | date:'mediumDate' }}</td>
         <td>{{ customer.age }}</td>
         <td>{{ customer.address }}</td>
         <td>{{ customer.adhaarNumber }}</td>
-        <td>
-          <button (click)="editCustomer(customer)">Edit</button>
-          <button (click)="deleteCustomer(customer.id)">Delete</button>
+        <td style="text-align: center;">
+          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm" (click)="openEditDialog(customer)" pTooltip="Edit" tooltipPosition="top"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text p-button-sm" (click)="confirmDelete(customer)" pTooltip="Delete" tooltipPosition="top"></button>
         </td>
       </tr>
-    </tbody>
-  </table>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="9" class="text-center">No customers found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
+
+<p-dialog header="{{ isEdit ? 'Edit Customer' : 'Add Customer' }}" [(visible)]="displayDialog" [modal]="true" [closable]="false" [style]="{width: '400px'}">
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input id="name" type="text" pInputText formControlName="name" />
+      </div>
+      <div class="p-field">
+        <label for="phone">Phone</label>
+        <input id="phone" type="text" pInputText formControlName="phone" />
+      </div>
+      <div class="p-field">
+        <label for="roomNumber">Room</label>
+        <input id="roomNumber" type="number" pInputText formControlName="roomNumber" />
+      </div>
+      <div class="p-field">
+        <label for="rent">Rent</label>
+        <input id="rent" type="number" pInputText formControlName="rent" />
+      </div>
+      <div class="p-field">
+        <label for="joiningDate">Joining Date</label>
+        <p-calendar id="joiningDate" formControlName="joiningDate" dateFormat="yy-mm-dd"></p-calendar>
+      </div>
+      <div class="p-field">
+        <label for="age">Age</label>
+        <input id="age" type="number" pInputText formControlName="age" />
+      </div>
+      <div class="p-field">
+        <label for="address">Address</label>
+        <input id="address" type="text" pInputText formControlName="address" />
+      </div>
+      <div class="p-field">
+        <label for="adhaarNumber">Adhaar</label>
+        <input id="adhaarNumber" type="text" pInputText formControlName="adhaarNumber" />
+      </div>
+    </div>
+    <div class="p-dialog-footer">
+      <button pButton type="submit" label="{{ isEdit ? 'Update' : 'Add' }}" [disabled]="customerForm.invalid"></button>
+      <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="closeDialog()"></button>
+    </div>
+  </form>
+</p-dialog>
