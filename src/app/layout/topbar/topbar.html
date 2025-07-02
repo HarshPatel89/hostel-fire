@@ -1,6 +1,14 @@
-<p-menubar [model]="[]">
-  <ng-template pTemplate="start">
-    <button pButton icon="pi pi-bars" (click)="onSidebarToggle()" class="p-button-text p-mr-2" aria-label="Toggle Sidebar"></button>
-    <span class="topbar-title">Hostel Fire</span>
-  </ng-template>
-</p-menubar>
+
+<nav class="topbar">
+  <div class="topbar-left">
+    <button class="hamburger" (click)="onSidebarToggle()">
+      <i class="pi pi-bars"></i>
+    </button>
+    <span class="brand">My App</span>
+  </div>
+  <div class="topbar-right">
+    <a routerLink="/login" class="login-btn">
+      <i class="pi pi-sign-in"></i> Login
+    </a>
+  </div>
+</nav>

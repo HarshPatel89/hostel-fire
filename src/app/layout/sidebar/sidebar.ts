@@ -1,15 +1,19 @@
+
 import { Component, Input } from '@angular/core';
-import { SidebarModule } from 'primeng/sidebar';
-import { ButtonModule } from 'primeng/button';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, SidebarModule, ButtonModule],
+  standalone: true,
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss'
 })
 export class Sidebar {
-  @Input() visible: boolean = false;
-  @Input() onHide: () => void = () => { };
+  @Input() visible = false;
+
+  onHide() {
+    this.visible = false;
+  }
 }

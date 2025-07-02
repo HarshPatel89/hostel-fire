@@ -1,0 +1,14 @@
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h2><i class="pi pi-sign-in"></i> Sign in to your account</h2>
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <input type="text" placeholder="Username" name="username" [(ngModel)]="username" required />
+      <input type="password" placeholder="Password" name="password" [(ngModel)]="password" required />
+      <button type="submit" [disabled]="loginForm.invalid">
+        <i class="pi pi-sign-in"></i> Login
+      </button>
+    </form>
+    <p class="signup-link">Don't have an account? <a routerLink="/register">Sign up</a></p>
+  </div>
+</div>

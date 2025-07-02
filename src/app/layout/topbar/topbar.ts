@@ -1,11 +1,12 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { MenubarModule } from 'primeng/menubar';
-import { ButtonModule } from 'primeng/button';
+
+import { Component, EventEmitter, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-topbar',
-  imports: [CommonModule, MenubarModule, ButtonModule],
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './topbar.html',
   styleUrl: './topbar.scss'
 })

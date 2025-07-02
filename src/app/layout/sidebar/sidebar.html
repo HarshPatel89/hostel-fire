@@ -1,8 +1,8 @@
-<p-sidebar [(visible)]="visible" [baseZIndex]="10000" (onHide)="onHide()">
-  <h3>Menu</h3>
-  <ul class="p-menu-list">
-    <li><button pButton type="button" label="Dashboard" class="p-button-text"></button></li>
-    <li><button pButton type="button" label="Customers" class="p-button-text"></button></li>
-    <li><button pButton type="button" label="Rooms" class="p-button-text"></button></li>
+
+<aside class="sidebar" [class.visible]="visible">
+  <ul>
+    <li routerLink="/home" routerLinkActive="active"><i class="pi pi-home"></i> <span>Home</span></li>
+    <li routerLink="/rooms" routerLinkActive="active"><i class="pi pi-image"></i> <span>Rooms</span></li>
+    <li routerLink="/customers" routerLinkActive="active"><i class="pi pi-users"></i> <span>Customers</span></li>
   </ul>
-</p-sidebar>
+</aside>
