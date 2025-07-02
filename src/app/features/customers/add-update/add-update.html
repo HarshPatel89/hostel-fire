@@ -1,1 +1,14 @@
-<p>add-update works!</p>
+<div class="customer-form">
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <label>Name: <input formControlName="name" /></label><br />
+    <label>Phone: <input formControlName="phone" /></label><br />
+    <label>Room Number: <input type="number" formControlName="roomNumber" /></label><br />
+    <label>Rent: <input type="number" formControlName="rent" /></label><br />
+    <label>Joining Date: <input type="date" formControlName="joiningDate" /></label><br />
+    <label>Age: <input type="number" formControlName="age" /></label><br />
+    <label>Address: <input formControlName="address" /></label><br />
+    <label>Adhaar Number: <input formControlName="adhaarNumber" /></label><br />
+    <button type="submit">{{ isEdit ? 'Update' : 'Add' }} Customer</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+  </form>
+</div>

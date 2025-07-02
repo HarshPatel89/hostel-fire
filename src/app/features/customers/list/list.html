@@ -1,1 +1,34 @@
-<p>list works!</p>
+<div class="customer-list">
+  <button (click)="addCustomer()">Add Customer</button>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Room</th>
+        <th>Rent</th>
+        <th>Joining Date</th>
+        <th>Age</th>
+        <th>Address</th>
+        <th>Adhaar</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers$ | async">
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.phone }}</td>
+        <td>{{ customer.roomNumber }}</td>
+        <td>{{ customer.rent }}</td>
+        <td>{{ customer.joiningDate | date }}</td>
+        <td>{{ customer.age }}</td>
+        <td>{{ customer.address }}</td>
+        <td>{{ customer.adhaarNumber }}</td>
+        <td>
+          <button (click)="editCustomer(customer)">Edit</button>
+          <button (click)="deleteCustomer(customer.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
