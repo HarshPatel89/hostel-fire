@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Observable, of } from 'rxjs';
 import { FirebaseDataService } from '../../../shared/services/firebase-data.service';
 import { Customer } from '../../../shared/models/customer';
+import { Room } from '../../../shared/models/room';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
@@ -40,7 +41,10 @@ export class List {
   @ViewChild('dt') dt!: Table;
   
   customers$: Observable<Customer[]>;
+  rooms$: Observable<Room[]>;
   customersList: Customer[] = [];
+  roomsList: Room[] = [];
+  availableRooms: any[] = [];
   customerForm: FormGroup;
   displayDialog = false;
   isEdit = false;
@@ -54,8 +58,15 @@ export class List {
     private messageService: MessageService
   ) {
     this.customers$ = this.dataService.getCustomers();
+    this.rooms$ = this.dataService.getRooms();
+    
     this.customers$.subscribe(list => {
       this.customersList = list || [];
+    });
+    
+    this.rooms$.subscribe(list => {
+      this.roomsList = list || [];
+      this.updateAvailableRooms();
     });
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
@@ -66,6 +77,16 @@ export class List {
       age: [null, Validators.required],
       address: ['', Validators.required],
       adhaarNumber: ['', Validators.required],
+    });
+
+    // Auto-fill rent when room is selected
+    this.customerForm.get('roomNumber')?.valueChanges.subscribe(roomNumber => {
+      if (roomNumber) {
+        const selectedRoom = this.roomsList.find(room => room.number === roomNumber);
+        if (selectedRoom) {
+          this.customerForm.patchValue({ rent: selectedRoom.rent });
+        }
+      }
     });
   }
 
@@ -78,6 +99,15 @@ export class List {
   // Get total monthly rent
   getTotalRent(): number {
     return this.customersList.reduce((total, customer) => total + customer.rent, 0);
+  }
+
+  // Update available rooms for dropdown
+  updateAvailableRooms() {
+    this.availableRooms = this.roomsList.map(room => ({
+      label: `Room ${room.number} (₹${room.rent}/month)`,
+      value: room.number,
+      room: room
+    }));
   }
 
   // Calculate days since joining
@@ -123,39 +153,36 @@ export class List {
       id: this.selectedCustomerId || ''
     };
     
-    if (this.isEdit && this.selectedCustomerId) {
-      this.dataService.updateCustomer({ ...customer, id: this.selectedCustomerId }).then(() => {
-        this.messageService.add({ 
-          severity: 'success', 
-          summary: 'Success', 
-          detail: 'Customer updated successfully' 
-        });
+    const addOrUpdateCustomer = async () => {
+      try {
+        if (this.isEdit && this.selectedCustomerId) {
+          await this.dataService.updateCustomer({ ...customer, id: this.selectedCustomerId });
+          this.messageService.add({ 
+            severity: 'success', 
+            summary: 'Success', 
+            detail: 'Tenant updated successfully' 
+          });
+        } else {
+          await this.dataService.addCustomer(customer);
+          
+          this.messageService.add({ 
+            severity: 'success', 
+            summary: 'Success', 
+            detail: 'Tenant added successfully' 
+          });
+        }
         this.closeDialog();
-      }).catch(error => {
+      } catch (error) {
         this.messageService.add({ 
           severity: 'error', 
           summary: 'Error', 
-          detail: 'Failed to update customer' 
+          detail: this.isEdit ? 'Failed to update tenant' : 'Failed to add tenant' 
         });
         this.isSubmitting = false;
-      });
-    } else {
-      this.dataService.addCustomer(customer).then(() => {
-        this.messageService.add({ 
-          severity: 'success', 
-          summary: 'Success', 
-          detail: 'Customer added successfully' 
-        });
-        this.closeDialog();
-      }).catch(error => {
-        this.messageService.add({ 
-          severity: 'error', 
-          summary: 'Error', 
-          detail: 'Failed to add customer' 
-        });
-        this.isSubmitting = false;
-      });
-    }
+      }
+    };
+    
+    addOrUpdateCustomer();
   }
 
   confirmDelete(customer: Customer) {
@@ -168,13 +195,13 @@ export class List {
           this.messageService.add({ 
             severity: 'success', 
             summary: 'Deleted', 
-            detail: 'Customer deleted successfully' 
+            detail: 'Tenant deleted successfully' 
           });
         }).catch(error => {
           this.messageService.add({ 
             severity: 'error', 
             summary: 'Error', 
-            detail: 'Failed to delete customer' 
+            detail: 'Failed to delete tenant' 
           });
         });
       }

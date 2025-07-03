@@ -1,0 +1,524 @@
+// Dashboard Container
+.dashboard-container {
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+
+  // Dashboard Header
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    color: white;
+
+    .header-content {
+      .page-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        i {
+          font-size: 1.8rem;
+        }
+      }
+
+      .page-subtitle {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 1rem;
+      }
+    }
+
+    .header-actions {
+      .p-button-outlined {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-weight: 600;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+      }
+    }
+  }
+
+  // Metrics Section
+  .metrics-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .metric-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+      border: 1px solid #e9ecef;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+
+        &.tenants {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        &.rooms {
+          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        &.occupancy {
+          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        &.revenue {
+          background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        &.potential {
+          background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        &.average {
+          background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+      }
+
+      .metric-content {
+        flex: 1;
+
+        .metric-number {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+          color: #6c757d;
+          font-size: 0.9rem;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+        }
+
+        .metric-trend {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          font-size: 0.8rem;
+          font-weight: 500;
+
+          &.positive {
+            color: #28a745;
+          }
+
+          &.warning {
+            color: #ffc107;
+          }
+
+          &.danger {
+            color: #dc3545;
+          }
+
+          i {
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+  }
+
+  // Charts Section
+  .charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      border: 1px solid #e9ecef;
+
+      .chart-header {
+        padding: 1.5rem 2rem;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+
+        h3 {
+          margin: 0 0 0.5rem 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2c3e50;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          i {
+            color: #667eea;
+          }
+        }
+
+        p {
+          margin: 0;
+          color: #6c757d;
+          font-size: 0.9rem;
+        }
+      }
+
+      .chart-container {
+        padding: 1rem;
+        height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  // Progress Section
+  .progress-section {
+    margin-bottom: 2rem;
+
+    .progress-card {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e9ecef;
+
+      h3 {
+        margin: 0 0 1.5rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          color: #667eea;
+        }
+      }
+
+      .progress-items {
+        display: grid;
+        gap: 1.5rem;
+
+        .progress-item {
+          .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+          }
+
+          ::ng-deep .p-progressbar {
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+
+            .p-progressbar-value {
+              border-radius: 4px;
+              transition: all 0.3s ease;
+            }
+
+            &.success .p-progressbar-value {
+              background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            }
+
+            &.warning .p-progressbar-value {
+              background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            }
+
+            &.danger .p-progressbar-value {
+              background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Activities Section
+  .activities-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .activity-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      border: 1px solid #e9ecef;
+
+      .activity-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+
+        h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2c3e50;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          i {
+            color: #667eea;
+          }
+        }
+      }
+
+      .activity-content {
+        padding: 1rem 2rem;
+
+        .activity-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem 0;
+          border-bottom: 1px solid #f8f9fa;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+          }
+
+          .activity-details {
+            flex: 1;
+
+            .activity-title {
+              font-weight: 600;
+              color: #2c3e50;
+              margin-bottom: 0.25rem;
+            }
+
+            .activity-subtitle {
+              color: #6c757d;
+              font-size: 0.9rem;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+
+              .activity-meta {
+                margin-left: auto;
+                font-size: 0.8rem;
+                opacity: 0.8;
+              }
+            }
+          }
+
+          .activity-status {
+            ::ng-deep .p-tag {
+              font-size: 0.8rem;
+              padding: 0.25rem 0.5rem;
+            }
+          }
+        }
+
+        .status-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem 0;
+          border-bottom: 1px solid #f8f9fa;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+          }
+
+          .status-details {
+            flex: 1;
+
+            .status-title {
+              font-weight: 600;
+              color: #2c3e50;
+              margin-bottom: 0.25rem;
+            }
+
+            .status-count {
+              color: #6c757d;
+              font-size: 0.9rem;
+            }
+          }
+        }
+
+        .no-activities {
+          text-align: center;
+          padding: 2rem;
+          color: #6c757d;
+
+          i {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+            display: block;
+          }
+
+          p {
+            margin: 0;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  // Actions Section
+  .actions-section {
+    .action-card {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e9ecef;
+
+      h3 {
+        margin: 0 0 1.5rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          color: #667eea;
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .p-button {
+          flex: 1;
+          min-width: 150px;
+          padding: 0.75rem 1rem;
+          font-weight: 600;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+
+    .dashboard-header {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+
+      .header-content {
+        .page-title {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .metrics-section {
+      grid-template-columns: 1fr;
+    }
+
+    .charts-section {
+      grid-template-columns: 1fr;
+    }
+
+    .activities-section {
+      grid-template-columns: 1fr;
+    }
+
+    .actions-section {
+      .action-card {
+        .action-buttons {
+          flex-direction: column;
+
+          .p-button {
+            min-width: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Chart customization
+::ng-deep {
+  .p-chart {
+    canvas {
+      border-radius: 8px;
+    }
+  }
+
+  .p-progressbar {
+    .p-progressbar-value {
+      transition: width 0.6s ease;
+    }
+  }
+}

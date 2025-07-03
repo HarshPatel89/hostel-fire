@@ -7,17 +7,12 @@
     <div class="header-content">
       <h1 class="page-title">
         <i class="pi pi-users"></i>
-        Customer Management
+        Tenant Management
       </h1>
-      <p class="page-subtitle">Manage hostel customers and their information</p>
+      <p class="page-subtitle">Manage hostel tenants and their information</p>
     </div>
     <div class="header-actions">
-      <button 
-        pButton 
-        type="button" 
-        label="Add New Customer" 
-        icon="pi pi-plus" 
-        class="p-button-primary add-button"
+      <button pButton type="button" label="Add New Tenant" icon="pi pi-plus" class="p-button-primary add-button"
         (click)="openAddDialog()">
       </button>
     </div>
@@ -31,7 +26,7 @@
       </div>
       <div class="stat-content">
         <div class="stat-number">{{ customersList.length }}</div>
-        <div class="stat-label">Total Customers</div>
+        <div class="stat-label">Total Tenants</div>
       </div>
     </div>
     <div class="stat-card">
@@ -56,36 +51,22 @@
 
   <!-- Enhanced Table -->
   <div class="table-container">
-    <p-table
-      #dt
-      [value]="customersList"
-      [paginator]="true"
-      [rows]="10"
-      [responsiveLayout]="'scroll'"
-      [showCurrentPageReport]="true"
-      [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [tableStyle]="{ 'min-width': '100%' }"
-      class="customers-table"
-      emptyMessage="No customers found."
+    <p-table #dt [value]="customersList" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'"
+      [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 20, 50]" [tableStyle]="{ 'min-width': '100%' }"
+      class="customers-table" emptyMessage="No tenants found."
       [globalFilterFields]="['name', 'phone', 'roomNumber', 'address']"
-      styleClass="p-datatable-striped p-datatable-hoverable-rows"
-    >
+      styleClass="p-datatable-striped p-datatable-hoverable-rows">
       <ng-template pTemplate="caption">
         <div class="table-header">
           <div class="table-title">
             <i class="pi pi-list"></i>
-            Customer List
+            Tenant List
           </div>
           <div class="table-actions">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
-              <input 
-                pInputText 
-                type="text" 
-                placeholder="Search customers..." 
-                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                style="width: 250px;"
-              />
+              <input pInputText type="text" placeholder="Search tenants..."
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')" style="width: 250px;" />
             </span>
           </div>
         </div>
@@ -94,7 +75,7 @@
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 50px;">#</th>
-          <th style="width: 200px;">Customer Info</th>
+          <th style="width: 200px;">Tenant Info</th>
           <th style="width: 120px;">Room</th>
           <th style="width: 120px;">Rent</th>
           <th style="width: 140px;">Joining Date</th>
@@ -146,23 +127,13 @@
           </td>
           <td style="text-align: center;">
             <div class="action-buttons">
-              <button 
-                pButton 
-                type="button" 
-                icon="pi pi-pencil" 
-                class="p-button-rounded p-button-text p-button-sm edit-btn" 
-                (click)="openEditDialog(customer)" 
-                pTooltip="Edit Customer" 
-                tooltipPosition="top">
+              <button pButton type="button" icon="pi pi-pencil"
+                class="p-button-rounded p-button-warning p-button-sm update-btn" (click)="openEditDialog(customer)"
+                pTooltip="Edit Tenant" tooltipPosition="top">
               </button>
-              <button 
-                pButton 
-                type="button" 
-                icon="pi pi-trash" 
-                class="p-button-rounded p-button-danger p-button-text p-button-sm delete-btn" 
-                (click)="confirmDelete(customer)" 
-                pTooltip="Delete Customer" 
-                tooltipPosition="top">
+              <button pButton type="button" icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-sm delete-btn" (click)="confirmDelete(customer)"
+                pTooltip="Delete Tenant" tooltipPosition="top">
               </button>
             </div>
           </td>
@@ -174,14 +145,9 @@
           <td colspan="9">
             <div class="empty-state">
               <i class="pi pi-users empty-icon"></i>
-              <h3>No Customers Found</h3>
-              <p>Start by adding your first customer to the hostel.</p>
-              <button 
-                pButton 
-                type="button" 
-                label="Add Customer" 
-                icon="pi pi-plus" 
-                class="p-button-primary"
+              <h3>No Tenants Found</h3>
+              <p>Start by adding your first tenant to the hostel.</p>
+              <button pButton type="button" label="Add Tenant" icon="pi pi-plus" class="p-button-primary"
                 (click)="openAddDialog()">
               </button>
             </div>
@@ -193,17 +159,10 @@
 </div>
 
 <!-- Enhanced Dialog for Add/Edit -->
-<p-dialog 
-  [header]="isEdit ? 'Edit Customer' : 'Add New Customer'" 
-  [(visible)]="displayDialog" 
-  [modal]="true" 
-  [closable]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [style]="{width: '600px'}"
-  [styleClass]="'customer-dialog'"
+<p-dialog [header]="isEdit ? 'Edit Tenant' : 'Add New Tenant'" [(visible)]="displayDialog" [modal]="true"
+  [closable]="true" [draggable]="false" [resizable]="false" [style]="{width: '600px'}" [styleClass]="'customer-dialog'"
   (onHide)="closeDialog()">
-  
+
   <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="customer-form">
     <div class="form-grid">
       <!-- Personal Information Section -->
@@ -212,33 +171,20 @@
           <i class="pi pi-user"></i>
           Personal Information
         </h3>
-        
+
         <div class="form-row">
           <div class="form-field">
             <label for="name" class="field-label">Full Name *</label>
-            <input 
-              id="name" 
-              type="text" 
-              pInputText 
-              formControlName="name" 
-              placeholder="Enter full name"
-              class="form-input"
-            />
+            <input id="name" type="text" pInputText formControlName="name" placeholder="Enter full name"
+              class="form-input" />
             <small class="error-message" *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched">
               Name is required
             </small>
           </div>
-          
+
           <div class="form-field">
             <label for="age" class="field-label">Age *</label>
-            <input 
-              id="age" 
-              type="number" 
-              pInputText 
-              formControlName="age" 
-              placeholder="Enter age"
-              class="form-input"
-            />
+            <input id="age" type="number" pInputText formControlName="age" placeholder="Enter age" class="form-input" />
             <small class="error-message" *ngIf="customerForm.get('age')?.invalid && customerForm.get('age')?.touched">
               Age is required
             </small>
@@ -247,14 +193,8 @@
 
         <div class="form-field">
           <label for="phone" class="field-label">Phone Number *</label>
-          <input 
-            id="phone" 
-            type="text" 
-            pInputText 
-            formControlName="phone" 
-            placeholder="Enter phone number"
-            class="form-input"
-          />
+          <input id="phone" type="text" pInputText formControlName="phone" placeholder="Enter phone number"
+            class="form-input" />
           <small class="error-message" *ngIf="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched">
             Phone number is required
           </small>
@@ -262,30 +202,21 @@
 
         <div class="form-field">
           <label for="adhaarNumber" class="field-label">Adhaar Number *</label>
-          <input 
-            id="adhaarNumber" 
-            type="text" 
-            pInputText 
-            formControlName="adhaarNumber" 
-            placeholder="Enter Adhaar number"
-            class="form-input"
-          />
-          <small class="error-message" *ngIf="customerForm.get('adhaarNumber')?.invalid && customerForm.get('adhaarNumber')?.touched">
+          <input id="adhaarNumber" type="text" pInputText formControlName="adhaarNumber"
+            placeholder="Enter Adhaar number" class="form-input" />
+          <small class="error-message"
+            *ngIf="customerForm.get('adhaarNumber')?.invalid && customerForm.get('adhaarNumber')?.touched">
             Adhaar number is required
           </small>
         </div>
 
         <div class="form-field">
           <label for="address" class="field-label">Address *</label>
-          <textarea 
-            id="address" 
-            pInputTextarea 
-            formControlName="address" 
-            placeholder="Enter complete address"
-            class="form-textarea"
-            [rows]="3">
+          <textarea id="address" pInputTextarea formControlName="address" placeholder="Enter complete address"
+            class="form-textarea" [rows]="3">
           </textarea>
-          <small class="error-message" *ngIf="customerForm.get('address')?.invalid && customerForm.get('address')?.touched">
+          <small class="error-message"
+            *ngIf="customerForm.get('address')?.invalid && customerForm.get('address')?.touched">
             Address is required
           </small>
         </div>
@@ -297,33 +228,24 @@
           <i class="pi pi-home"></i>
           Room Information
         </h3>
-        
+
         <div class="form-row">
           <div class="form-field">
             <label for="roomNumber" class="field-label">Room Number *</label>
-            <input 
-              id="roomNumber" 
-              type="number" 
-              pInputText 
-              formControlName="roomNumber" 
-              placeholder="Enter room number"
-              class="form-input"
-            />
-            <small class="error-message" *ngIf="customerForm.get('roomNumber')?.invalid && customerForm.get('roomNumber')?.touched">
+            <p-dropdown id="roomNumber" formControlName="roomNumber" [options]="availableRooms"
+              placeholder="Select a room" optionLabel="label" optionValue="value" class="form-dropdown"
+              [showClear]="true">
+            </p-dropdown>
+            <small class="error-message"
+              *ngIf="customerForm.get('roomNumber')?.invalid && customerForm.get('roomNumber')?.touched">
               Room number is required
             </small>
           </div>
-          
+
           <div class="form-field">
             <label for="rent" class="field-label">Monthly Rent (₹) *</label>
-            <input 
-              id="rent" 
-              type="number" 
-              pInputText 
-              formControlName="rent" 
-              placeholder="Enter rent amount"
-              class="form-input"
-            />
+            <input id="rent" type="number" pInputText formControlName="rent" placeholder="Enter rent amount"
+              class="form-input" />
             <small class="error-message" *ngIf="customerForm.get('rent')?.invalid && customerForm.get('rent')?.touched">
               Rent amount is required
             </small>
@@ -332,15 +254,11 @@
 
         <div class="form-field">
           <label for="joiningDate" class="field-label">Joining Date *</label>
-          <p-calendar 
-            id="joiningDate" 
-            formControlName="joiningDate" 
-            dateFormat="yy-mm-dd"
-            placeholder="Select joining date"
-            class="form-calendar"
-            [showIcon]="true">
+          <p-calendar id="joiningDate" formControlName="joiningDate" dateFormat="yy-mm-dd"
+            placeholder="Select joining date" class="form-calendar" [showIcon]="true">
           </p-calendar>
-          <small class="error-message" *ngIf="customerForm.get('joiningDate')?.invalid && customerForm.get('joiningDate')?.touched">
+          <small class="error-message"
+            *ngIf="customerForm.get('joiningDate')?.invalid && customerForm.get('joiningDate')?.touched">
             Joining date is required
           </small>
         </div>
@@ -348,19 +266,10 @@
     </div>
 
     <div class="dialog-footer">
-      <button 
-        pButton 
-        type="button" 
-        label="Cancel" 
-        class="p-button-secondary cancel-btn" 
-        (click)="closeDialog()">
+      <button pButton type="button" label="Cancel" class="p-button-secondary cancel-btn" (click)="closeDialog()">
       </button>
-      <button 
-        pButton 
-        type="submit" 
-        [label]="isEdit ? 'Update Customer' : 'Add Customer'" 
-        [icon]="isEdit ? 'pi pi-check' : 'pi pi-plus'"
-        [disabled]="customerForm.invalid || isSubmitting"
+      <button pButton type="submit" [label]="isEdit ? 'Update Tenant' : 'Add Tenant'"
+        [icon]="isEdit ? 'pi pi-check' : 'pi pi-plus'" [disabled]="customerForm.invalid || isSubmitting"
         class="submit-btn">
       </button>
     </div>

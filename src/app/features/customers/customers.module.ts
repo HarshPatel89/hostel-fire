@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -16,6 +15,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 
 const routes: Routes = [
   { path: '', component: List },
@@ -36,8 +38,10 @@ const routes: Routes = [
     ButtonModule,
     ConfirmDialogModule,
     ToastModule,
+    TooltipModule,
     List,
     AddUpdate
-  ]
+  ],
+  providers: [ConfirmationService, MessageService]
 })
 export class CustomersModule { }

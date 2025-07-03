@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -27,6 +28,7 @@ import { TextareaModule } from 'primeng/textarea';
     DialogModule,
     InputTextModule,
     DropdownModule,
+    MultiSelectModule,
     CalendarModule,
     ButtonModule,
     ConfirmDialogModule,
@@ -45,6 +47,7 @@ export class List {
   roomsList: Room[] = [];
   customersList: Customer[] = [];
   roomForm: FormGroup;
+  availableCustomers: any[] = [];
   displayDialog = false;
   isEdit = false;
   isSubmitting = false;
@@ -65,6 +68,7 @@ export class List {
     
     this.customers$.subscribe(list => {
       this.customersList = list || [];
+      this.updateAvailableCustomers();
     });
     
     this.roomForm = this.fb.group({
@@ -72,6 +76,7 @@ export class List {
       capacity: [null, [Validators.required, Validators.min(1), Validators.max(10)]],
       rent: [null, [Validators.required, Validators.min(0)]],
       remarks: ['', Validators.maxLength(500)],
+      customers: [[]]
     });
   }
 
@@ -125,6 +130,19 @@ export class List {
     }
   }
 
+  // Update available customers for dropdown
+  updateAvailableCustomers() {
+    this.availableCustomers = this.customersList
+      .filter(customer => !customer.roomNumber || !this.roomsList.some(room => 
+        room.customers && room.customers.includes(customer.id)
+      ))
+      .map(customer => ({
+        label: `${customer.name} (${customer.phone})`,
+        value: customer.id,
+        customer: customer
+      }));
+  }
+
   openAddDialog() {
     this.isEdit = false;
     this.selectedRoomId = null;
@@ -139,7 +157,8 @@ export class List {
       number: room.number,
       capacity: room.capacity,
       rent: room.rent,
-      remarks: room.remarks || ''
+      remarks: room.remarks || '',
+      customers: room.customers || []
     });
     this.displayDialog = true;
   }
@@ -158,9 +177,7 @@ export class List {
     const room: Room = {
       ...formValue,
       id: this.selectedRoomId || '',
-      customers: this.isEdit && this.selectedRoomId 
-        ? this.roomsList.find(r => r.id === this.selectedRoomId)?.customers || []
-        : []
+      customers: formValue.customers || []
     };
     
     if (this.isEdit && this.selectedRoomId) {
