@@ -1,1 +1,345 @@
 <p>list works!</p>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="room-list-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="pi pi-home"></i>
+        Room Management
+      </h1>
+      <p class="page-subtitle">Manage hostel rooms and their occupancy</p>
+    </div>
+    <div class="header-actions">
+      <button 
+        pButton 
+        type="button" 
+        label="Add New Room" 
+        icon="pi pi-plus" 
+        class="p-button-primary add-button"
+        (click)="openAddDialog()">
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-home"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ getTotalRooms() }}</div>
+        <div class="stat-label">Total Rooms</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-users"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ getOccupiedRooms() }}</div>
+        <div class="stat-label">Occupied Rooms</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ getAvailableRooms() }}</div>
+        <div class="stat-label">Available Rooms</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-percentage"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ getOccupancyRate() }}%</div>
+        <div class="stat-label">Occupancy Rate</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-dollar"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">₹{{ getCurrentMonthlyRent() | number:'1.0-0' }}</div>
+        <div class="stat-label">Current Monthly Rent</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-chart-line"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">₹{{ getTotalRentPotential() | number:'1.0-0' }}</div>
+        <div class="stat-label">Total Rent Potential</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Table -->
+  <div class="table-container">
+    <p-table
+      #dt
+      [value]="roomsList"
+      [paginator]="true"
+      [rows]="10"
+      [responsiveLayout]="'scroll'"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [tableStyle]="{ 'min-width': '100%' }"
+      class="rooms-table"
+      emptyMessage="No rooms found."
+      [globalFilterFields]="['number', 'remarks']"
+      styleClass="p-datatable-striped p-datatable-hoverable-rows"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <div class="table-title">
+            <i class="pi pi-list"></i>
+            Room List
+          </div>
+          <div class="table-actions">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input 
+                pInputText 
+                type="text" 
+                placeholder="Search rooms..." 
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                style="width: 250px;"
+              />
+            </span>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th style="width: 120px;">Room Info</th>
+          <th style="width: 100px;">Capacity</th>
+          <th style="width: 120px;">Rent</th>
+          <th style="width: 150px;">Status</th>
+          <th style="width: 200px;">Occupants</th>
+          <th style="width: 200px;">Remarks</th>
+          <th style="width: 120px; text-align: center;">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-room let-rowIndex="rowIndex">
+        <tr>
+          <td class="row-number">{{ rowIndex + 1 }}</td>
+          <td>
+            <div class="room-info">
+              <div class="room-number">
+                <i class="pi pi-home"></i>
+                Room {{ room.number }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="capacity-badge">
+              <i class="pi pi-users"></i>
+              {{ room.capacity }} persons
+            </span>
+          </td>
+          <td>
+            <span class="rent-amount">₹{{ room.rent | number:'1.0-0' }}</span>
+          </td>
+          <td>
+            <div class="status-info">
+              <span class="status-badge" [ngClass]="getRoomStatus(room).class">
+                <i [class]="getRoomStatus(room).icon"></i>
+                {{ getRoomStatus(room).status }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="occupants-info">
+              <div class="occupants-count">
+                {{ getCustomersInRoom(room).length }}/{{ room.capacity }} occupied
+              </div>
+              <div class="occupants-list" *ngIf="getCustomersInRoom(room).length > 0">
+                <div class="occupant-item" *ngFor="let customer of getCustomersInRoom(room)">
+                  <i class="pi pi-user"></i>
+                  {{ customer.name }}
+                </div>
+              </div>
+              <div class="no-occupants" *ngIf="getCustomersInRoom(room).length === 0">
+                <i class="pi pi-info-circle"></i>
+                No occupants
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="remarks-info">
+              <span class="remarks-text" *ngIf="room.remarks; else noRemarks">
+                {{ room.remarks }}
+              </span>
+              <ng-template #noRemarks>
+                <span class="no-remarks">No remarks</span>
+              </ng-template>
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <div class="action-buttons">
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-pencil" 
+                class="p-button-rounded p-button-text p-button-sm edit-btn" 
+                (click)="openEditDialog(room)" 
+                pTooltip="Edit Room" 
+                tooltipPosition="top">
+              </button>
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-trash" 
+                class="p-button-rounded p-button-danger p-button-text p-button-sm delete-btn" 
+                (click)="confirmDelete(room)" 
+                pTooltip="Delete Room" 
+                tooltipPosition="top">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8">
+            <div class="empty-state">
+              <i class="pi pi-home empty-icon"></i>
+              <h3>No Rooms Found</h3>
+              <p>Start by adding your first room to the hostel.</p>
+              <button 
+                pButton 
+                type="button" 
+                label="Add Room" 
+                icon="pi pi-plus" 
+                class="p-button-primary"
+                (click)="openAddDialog()">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Enhanced Dialog for Add/Edit -->
+<p-dialog 
+  [header]="isEdit ? 'Edit Room' : 'Add New Room'" 
+  [(visible)]="displayDialog" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '500px'}"
+  [styleClass]="'room-dialog'"
+  (onHide)="closeDialog()">
+  
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()" class="room-form">
+    <div class="form-grid">
+      <!-- Room Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="pi pi-home"></i>
+          Room Information
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-field">
+            <label for="number" class="field-label">Room Number *</label>
+            <input 
+              id="number" 
+              type="number" 
+              pInputText 
+              formControlName="number" 
+              placeholder="Enter room number"
+              class="form-input"
+            />
+            <small class="error-message" *ngIf="roomForm.get('number')?.invalid && roomForm.get('number')?.touched">
+              Room number is required and must be greater than 0
+            </small>
+          </div>
+          
+          <div class="form-field">
+            <label for="capacity" class="field-label">Capacity *</label>
+            <input 
+              id="capacity" 
+              type="number" 
+              pInputText 
+              formControlName="capacity" 
+              placeholder="Enter capacity"
+              class="form-input"
+            />
+            <small class="error-message" *ngIf="roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched">
+              Capacity is required and must be between 1 and 10
+            </small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="rent" class="field-label">Monthly Rent (₹) *</label>
+          <input 
+            id="rent" 
+            type="number" 
+            pInputText 
+            formControlName="rent" 
+            placeholder="Enter monthly rent"
+            class="form-input"
+          />
+          <small class="error-message" *ngIf="roomForm.get('rent')?.invalid && roomForm.get('rent')?.touched">
+            Monthly rent is required and must be greater than or equal to 0
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="remarks" class="field-label">Remarks</label>
+          <textarea 
+            id="remarks" 
+            pInputTextarea 
+            formControlName="remarks" 
+            placeholder="Enter any additional remarks about the room"
+            class="form-textarea"
+            [rows]="3">
+          </textarea>
+          <small class="error-message" *ngIf="roomForm.get('remarks')?.invalid && roomForm.get('remarks')?.touched">
+            Remarks cannot exceed 500 characters
+          </small>
+          <small class="char-count" *ngIf="roomForm.get('remarks')?.value">
+            {{ roomForm.get('remarks')?.value?.length }}/500 characters
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button 
+        pButton 
+        type="button" 
+        label="Cancel" 
+        class="p-button-secondary cancel-btn" 
+        (click)="closeDialog()">
+      </button>
+      <button 
+        pButton 
+        type="submit" 
+        [label]="isEdit ? 'Update Room' : 'Add Room'" 
+        [icon]="isEdit ? 'pi pi-check' : 'pi pi-plus'"
+        [disabled]="roomForm.invalid || isSubmitting"
+        class="submit-btn">
+      </button>
+    </div>
+  </form>
+</p-dialog>
