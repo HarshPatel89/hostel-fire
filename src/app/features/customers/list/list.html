@@ -74,33 +74,37 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 50px;">#</th>
-          <th style="width: 200px;">Tenant Info</th>
+          <th style="width: 40px;"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+          <th style="width: 200px;">Tenant</th>
           <th style="width: 120px;">Room</th>
           <th style="width: 120px;">Rent</th>
           <th style="width: 140px;">Joining Date</th>
           <th style="width: 80px;">Age</th>
           <th style="width: 200px;">Address</th>
-          <th style="width: 150px;">Adhaar</th>
+          <th style="width: 120px;">Status</th>
           <th style="width: 120px; text-align: center;">Actions</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
         <tr>
-          <td class="row-number">{{ rowIndex + 1 }}</td>
+          <td><p-tableCheckbox [value]="customer"></p-tableCheckbox></td>
           <td>
-            <div class="customer-info">
-              <div class="customer-name">{{ customer.name }}</div>
-              <div class="customer-phone">
-                <i class="pi pi-phone"></i>
-                {{ customer.phone }}
+            <div class="customer-cell">
+              <div class="avatar" [ngStyle]="{ 'background': customer.avatarColor }">
+                {{ customer.avatarInitials }}
+              </div>
+              <div class="customer-info">
+                <div class="customer-name">{{ customer.name }}</div>
+                <div class="customer-phone">
+                  <i class="pi pi-phone"></i>
+                  {{ customer.phone }}
+                </div>
               </div>
             </div>
           </td>
           <td>
             <span class="room-badge">
-              <i class="pi pi-home"></i>
               Room {{ customer.roomNumber }}
             </span>
           </td>
@@ -118,12 +122,13 @@
           </td>
           <td>
             <div class="address-info">
-              <i class="pi pi-map-marker"></i>
               {{ customer.address }}
             </div>
           </td>
           <td>
-            <span class="adhaar-number">{{ customer.adhaarNumber }}</span>
+            <span class="status-badge" [ngClass]="customer.status ? customer.status.toLowerCase() : 'active'">
+              {{ customer.status || 'Active' }}
+            </span>
           </td>
           <td style="text-align: center;">
             <div class="action-buttons">

@@ -5,4 +5,6 @@ export interface Room {
   rent: number;
   remarks: string;
   customers: string[];
+  avatarColor?: string;
+  avatarInitials?: string;
 }

@@ -120,8 +120,8 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 50px;">#</th>
-          <th style="width: 120px;">Room Info</th>
+          <th style="width: 40px;"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+          <th style="width: 120px;">Room</th>
           <th style="width: 100px;">Capacity</th>
           <th style="width: 120px;">Rent</th>
           <th style="width: 150px;">Status</th>
@@ -133,18 +133,19 @@
 
       <ng-template pTemplate="body" let-room let-rowIndex="rowIndex">
         <tr>
-          <td class="row-number">{{ rowIndex + 1 }}</td>
+          <td><p-tableCheckbox [value]="room"></p-tableCheckbox></td>
           <td>
-            <div class="room-info">
-              <div class="room-number">
-                <i class="pi pi-home"></i>
-                Room {{ room.number }}
+            <div class="room-cell">
+              <div class="avatar" [ngStyle]="{ 'background': room.avatarColor }">
+                {{ room.avatarInitials }}
+              </div>
+              <div class="room-info">
+                <div class="room-number">Room {{ room.number }}</div>
               </div>
             </div>
           </td>
           <td>
             <span class="capacity-badge">
-              <i class="pi pi-users"></i>
               {{ room.capacity }} persons
             </span>
           </td>
@@ -152,26 +153,24 @@
             <span class="rent-amount">₹{{ room.rent | number:'1.0-0' }}</span>
           </td>
           <td>
-            <div class="status-info">
-              <span class="status-badge" [ngClass]="getRoomStatus(room).class">
-                <i [class]="getRoomStatus(room).icon"></i>
-                {{ getRoomStatus(room).status }}
-              </span>
-            </div>
+            <span class="status-badge" [ngClass]="getRoomStatus(room).class">
+              {{ getRoomStatus(room).status }}
+            </span>
           </td>
           <td>
             <div class="occupants-info">
               <div class="occupants-count">
-                            {{ getCustomersInRoom(room).length }}/{{ room.capacity }} occupied
-          </div>
-          <div class="occupants-list" *ngIf="getCustomersInRoom(room).length > 0">
-            <div class="occupant-item" *ngFor="let tenant of getCustomersInRoom(room)">
-              <i class="pi pi-user"></i>
-              {{ tenant.name }}
-            </div>
-          </div>
-          <div class="no-occupants" *ngIf="getCustomersInRoom(room).length === 0">
-                <i class="pi pi-info-circle"></i>
+                {{ getCustomersInRoom(room).length }}/{{ room.capacity }} occupied
+              </div>
+              <div class="occupants-list" *ngIf="getCustomersInRoom(room).length > 0">
+                <div class="occupant-item" *ngFor="let tenant of getCustomersInRoom(room)">
+                  <span class="occupant-avatar" [ngStyle]="{ 'background': tenant.avatarColor }">
+                    {{ tenant.avatarInitials }}
+                  </span>
+                  {{ tenant.name }}
+                </div>
+              </div>
+              <div class="no-occupants" *ngIf="getCustomersInRoom(room).length === 0">
                 No occupants
               </div>
             </div>
@@ -188,42 +187,13 @@
           </td>
           <td style="text-align: center;">
             <div class="action-buttons">
-              <!-- <button 
-                pButton 
-                type="button" 
-                icon="pi pi-pencil" 
-                class="p-button-rounded p-button-warning p-button-sm update-btn" 
-                (click)="openEditDialog(room)" 
-                pTooltip="Edit Room" 
-                tooltipPosition="top">
+              <button pButton type="button" icon="pi pi-pencil"
+                class="p-button-rounded p-button-warning p-button-sm update-btn" (click)="openEditDialog(room)"
+                pTooltip="Edit Room" tooltipPosition="top">
               </button>
-              <button 
-                pButton 
-                type="button" 
-                icon="pi pi-trash" 
-                class="p-button-rounded p-button-danger p-button-sm delete-btn" 
-                (click)="confirmDelete(room)" 
-                pTooltip="Delete Room" 
-                tooltipPosition="top">
-              </button> -->
-
-              <button 
-                pButton 
-                type="button" 
-                icon="pi pi-pencil" 
-                class="p-button-rounded p-button-warning p-button-sm update-btn" 
-                (click)="openEditDialog(room)" 
-                pTooltip="Edit Room" 
-                tooltipPosition="top">
-              </button>
-              <button 
-                pButton 
-                type="button" 
-                icon="pi pi-trash" 
-                class="p-button-rounded p-button-danger p-button-sm delete-btn" 
-                (click)="confirmDelete(room)" 
-                pTooltip="Delete Room" 
-                tooltipPosition="top">
+              <button pButton type="button" icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-sm delete-btn" (click)="confirmDelete(room)"
+                pTooltip="Delete Room" tooltipPosition="top">
               </button>
             </div>
           </td>

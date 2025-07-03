@@ -8,4 +8,6 @@ export interface Customer {
   age: number;
   address: string;
   adhaarNumber: string;
+  avatarColor?: string;
+  avatarInitials?: string;
 }

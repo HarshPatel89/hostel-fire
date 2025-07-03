@@ -61,7 +61,11 @@ export class List {
     this.rooms$ = this.dataService.getRooms();
     
     this.customers$.subscribe(list => {
-      this.customersList = list || [];
+      this.customersList = (list || []).map(c => ({
+        ...c,
+        avatarColor: this.getAvatarColor(c.name),
+        avatarInitials: this.getAvatarInitials(c.name)
+      }));
     });
     
     this.rooms$.subscribe(list => {
@@ -206,5 +210,22 @@ export class List {
         });
       }
     });
+  }
+
+  getAvatarInitials(name: string): string {
+    if (!name) return '?';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+  }
+
+  getAvatarColor(name: string): string {
+    if (!name) return '#bdbdbd';
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = `hsl(${hash % 360}, 70%, 70%)`;
+    return color;
   }
 }

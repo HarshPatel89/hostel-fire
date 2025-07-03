@@ -63,7 +63,11 @@ export class List {
     this.customers$ = this.dataService.getCustomers();
     
     this.rooms$.subscribe(list => {
-      this.roomsList = list || [];
+      this.roomsList = (list || []).map(r => ({
+        ...r,
+        avatarColor: this.getAvatarColor(r.number),
+        avatarInitials: this.getAvatarInitials(r.number)
+      }));
     });
     
     this.customers$.subscribe(list => {
@@ -241,5 +245,21 @@ export class List {
         });
       }
     });
+  }
+
+  getAvatarInitials(number: number): string {
+    if (!number) return '?';
+    return String(number).slice(-2).toUpperCase();
+  }
+
+  getAvatarColor(number: number): string {
+    if (!number) return '#bdbdbd';
+    let hash = 0;
+    const str = String(number);
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = `hsl(${hash % 360}, 70%, 70%)`;
+    return color;
   }
 }

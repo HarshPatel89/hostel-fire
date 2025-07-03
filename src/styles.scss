@@ -164,7 +164,8 @@ html, body {
 .p-datatable {
   .p-datatable-header {
     background-color: var(--background-color-light);
-    border-bottom: 1px solid var(--border-color);
+    /* border-bottom: 1px solid var(--border-color);  */
+    border: 0;
   }
   
   .p-datatable-thead > tr > th {
