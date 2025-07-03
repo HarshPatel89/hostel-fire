@@ -1,14 +1,28 @@
-
 :host {
   display: block;
+  min-height: 100vh;
+  background-color: var(--background-color-light);
 }
 
 .main-content {
   margin-left: 0;
   padding: 1rem;
   transition: margin-left 0.2s ease;
+  min-height: calc(100vh - 60px); // Subtract topbar height
+  background-color: var(--background-color-light);
 }
 
 .main-content.shifted {
   margin-left: 200px; /* width of sidebar */
+}
+
+// Ensure proper spacing and layout
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0.5rem;
+    
+    &.shifted {
+      margin-left: 0;
+    }
+  }
 }

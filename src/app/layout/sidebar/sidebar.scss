@@ -1,17 +1,18 @@
-
 .sidebar {
   position: fixed;
   top: 60px; /* height of topbar */
   left: 0;
   bottom: 0;
   width: 200px;
-  background: #0d1321;
-  color: #ffffff;
+  background: #ffffff;
+  color: #2c3e50;
   padding-top: 1rem;
   transform: translateX(-100%);
   transition: transform 0.2s ease;
   overflow-y: auto;
   z-index: 999;
+  border-right: 1px solid #e9ecef;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 
   &.visible {
     transform: translateX(0);
@@ -28,18 +29,33 @@
       gap: 0.75rem;
       padding: 0.75rem 1rem;
       cursor: pointer;
-      color: #fff;
+      color: #495057;
       font-size: 0.95rem;
-      opacity: 0.8;
-      transition: opacity 0.15s ease, background-color 0.15s ease;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      border-left: 3px solid transparent;
 
-      &:hover, &.active {
-        opacity: 1;
-        background: rgba(255,255,255,0.05);
+      &:hover {
+        background: #f8f9fa;
+        color: #2c3e50;
+        border-left-color: #667eea;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #ffffff;
+        border-left-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+
+        i {
+          color: #ffffff;
+        }
       }
 
       i {
         font-size: 1rem;
+        color: #6c757d;
+        transition: color 0.15s ease;
       }
 
       span {

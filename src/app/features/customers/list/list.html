@@ -1,98 +1,368 @@
 <p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>
 
-<div class="customer-list">
-  <button pButton type="button" label="Add Customer" icon="pi pi-plus" (click)="openAddDialog()"></button>
-  <p-table
-    [value]="customersList"
-    [paginator]="true"
-    [rows]="10"
-    [responsiveLayout]="'scroll'"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[5,10,20]"
-    [tableStyle]="{ 'min-width': '900px' }"
-    class="p-datatable-striped p-datatable-hoverable-rows"
-    emptyMessage="No customers found."
-  >
-    <ng-template pTemplate="caption">
-      <div class="table-caption">Customer List</div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Room</th>
-        <th>Rent (₹)</th>
-        <th>Joining Date</th>
-        <th>Age</th>
-        <th>Address</th>
-        <th>Adhaar</th>
-        <th style="width: 120px; text-align: center;">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
-      <tr>
-        <td>{{ customer.name }}</td>
-        <td>{{ customer.phone }}</td>
-        <td>{{ customer.roomNumber }}</td>
-        <td><span class="rent">₹{{ customer.rent | number:'1.0-0' }}</span></td>
-        <td>{{ customer.joiningDate | date:'mediumDate' }}</td>
-        <td>{{ customer.age }}</td>
-        <td>{{ customer.address }}</td>
-        <td>{{ customer.adhaarNumber }}</td>
-        <td style="text-align: center;">
-          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm" (click)="openEditDialog(customer)" pTooltip="Edit" tooltipPosition="top"></button>
-          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text p-button-sm" (click)="confirmDelete(customer)" pTooltip="Delete" tooltipPosition="top"></button>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="9" class="text-center">No customers found.</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+<div class="customer-list-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="pi pi-users"></i>
+        Customer Management
+      </h1>
+      <p class="page-subtitle">Manage hostel customers and their information</p>
+    </div>
+    <div class="header-actions">
+      <button 
+        pButton 
+        type="button" 
+        label="Add New Customer" 
+        icon="pi pi-plus" 
+        class="p-button-primary add-button"
+        (click)="openAddDialog()">
+      </button>
+    </div>
+  </div>
 
-<p-dialog header="{{ isEdit ? 'Edit Customer' : 'Add Customer' }}" [(visible)]="displayDialog" [modal]="true" [closable]="false" [style]="{width: '400px'}">
-  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label for="name">Name</label>
-        <input id="name" type="text" pInputText formControlName="name" />
+  <!-- Stats Cards -->
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-users"></i>
       </div>
-      <div class="p-field">
-        <label for="phone">Phone</label>
-        <input id="phone" type="text" pInputText formControlName="phone" />
-      </div>
-      <div class="p-field">
-        <label for="roomNumber">Room</label>
-        <input id="roomNumber" type="number" pInputText formControlName="roomNumber" />
-      </div>
-      <div class="p-field">
-        <label for="rent">Rent</label>
-        <input id="rent" type="number" pInputText formControlName="rent" />
-      </div>
-      <div class="p-field">
-        <label for="joiningDate">Joining Date</label>
-        <p-calendar id="joiningDate" formControlName="joiningDate" dateFormat="yy-mm-dd"></p-calendar>
-      </div>
-      <div class="p-field">
-        <label for="age">Age</label>
-        <input id="age" type="number" pInputText formControlName="age" />
-      </div>
-      <div class="p-field">
-        <label for="address">Address</label>
-        <input id="address" type="text" pInputText formControlName="address" />
-      </div>
-      <div class="p-field">
-        <label for="adhaarNumber">Adhaar</label>
-        <input id="adhaarNumber" type="text" pInputText formControlName="adhaarNumber" />
+      <div class="stat-content">
+        <div class="stat-number">{{ customersList.length }}</div>
+        <div class="stat-label">Total Customers</div>
       </div>
     </div>
-    <div class="p-dialog-footer">
-      <button pButton type="submit" label="{{ isEdit ? 'Update' : 'Add' }}" [disabled]="customerForm.invalid"></button>
-      <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="closeDialog()"></button>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-home"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ getOccupiedRooms() }}</div>
+        <div class="stat-label">Occupied Rooms</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-dollar"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">₹{{ getTotalRent() | number:'1.0-0' }}</div>
+        <div class="stat-label">Total Monthly Rent</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Table -->
+  <div class="table-container">
+    <p-table
+      #dt
+      [value]="customersList"
+      [paginator]="true"
+      [rows]="10"
+      [responsiveLayout]="'scroll'"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [tableStyle]="{ 'min-width': '100%' }"
+      class="customers-table"
+      emptyMessage="No customers found."
+      [globalFilterFields]="['name', 'phone', 'roomNumber', 'address']"
+      styleClass="p-datatable-striped p-datatable-hoverable-rows"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <div class="table-title">
+            <i class="pi pi-list"></i>
+            Customer List
+          </div>
+          <div class="table-actions">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input 
+                pInputText 
+                type="text" 
+                placeholder="Search customers..." 
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                style="width: 250px;"
+              />
+            </span>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th style="width: 200px;">Customer Info</th>
+          <th style="width: 120px;">Room</th>
+          <th style="width: 120px;">Rent</th>
+          <th style="width: 140px;">Joining Date</th>
+          <th style="width: 80px;">Age</th>
+          <th style="width: 200px;">Address</th>
+          <th style="width: 150px;">Adhaar</th>
+          <th style="width: 120px; text-align: center;">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+        <tr>
+          <td class="row-number">{{ rowIndex + 1 }}</td>
+          <td>
+            <div class="customer-info">
+              <div class="customer-name">{{ customer.name }}</div>
+              <div class="customer-phone">
+                <i class="pi pi-phone"></i>
+                {{ customer.phone }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="room-badge">
+              <i class="pi pi-home"></i>
+              Room {{ customer.roomNumber }}
+            </span>
+          </td>
+          <td>
+            <span class="rent-amount">₹{{ customer.rent | number:'1.0-0' }}</span>
+          </td>
+          <td>
+            <div class="date-info">
+              <div class="date-value">{{ customer.joiningDate | date:'MMM dd, yyyy' }}</div>
+              <div class="date-days">{{ getDaysSinceJoining(customer.joiningDate) }} days</div>
+            </div>
+          </td>
+          <td>
+            <span class="age-badge">{{ customer.age }} yrs</span>
+          </td>
+          <td>
+            <div class="address-info">
+              <i class="pi pi-map-marker"></i>
+              {{ customer.address }}
+            </div>
+          </td>
+          <td>
+            <span class="adhaar-number">{{ customer.adhaarNumber }}</span>
+          </td>
+          <td style="text-align: center;">
+            <div class="action-buttons">
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-pencil" 
+                class="p-button-rounded p-button-text p-button-sm edit-btn" 
+                (click)="openEditDialog(customer)" 
+                pTooltip="Edit Customer" 
+                tooltipPosition="top">
+              </button>
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-trash" 
+                class="p-button-rounded p-button-danger p-button-text p-button-sm delete-btn" 
+                (click)="confirmDelete(customer)" 
+                pTooltip="Delete Customer" 
+                tooltipPosition="top">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9">
+            <div class="empty-state">
+              <i class="pi pi-users empty-icon"></i>
+              <h3>No Customers Found</h3>
+              <p>Start by adding your first customer to the hostel.</p>
+              <button 
+                pButton 
+                type="button" 
+                label="Add Customer" 
+                icon="pi pi-plus" 
+                class="p-button-primary"
+                (click)="openAddDialog()">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Enhanced Dialog for Add/Edit -->
+<p-dialog 
+  [header]="isEdit ? 'Edit Customer' : 'Add New Customer'" 
+  [(visible)]="displayDialog" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '600px'}"
+  [styleClass]="'customer-dialog'"
+  (onHide)="closeDialog()">
+  
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="customer-form">
+    <div class="form-grid">
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="pi pi-user"></i>
+          Personal Information
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-field">
+            <label for="name" class="field-label">Full Name *</label>
+            <input 
+              id="name" 
+              type="text" 
+              pInputText 
+              formControlName="name" 
+              placeholder="Enter full name"
+              class="form-input"
+            />
+            <small class="error-message" *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched">
+              Name is required
+            </small>
+          </div>
+          
+          <div class="form-field">
+            <label for="age" class="field-label">Age *</label>
+            <input 
+              id="age" 
+              type="number" 
+              pInputText 
+              formControlName="age" 
+              placeholder="Enter age"
+              class="form-input"
+            />
+            <small class="error-message" *ngIf="customerForm.get('age')?.invalid && customerForm.get('age')?.touched">
+              Age is required
+            </small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="phone" class="field-label">Phone Number *</label>
+          <input 
+            id="phone" 
+            type="text" 
+            pInputText 
+            formControlName="phone" 
+            placeholder="Enter phone number"
+            class="form-input"
+          />
+          <small class="error-message" *ngIf="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched">
+            Phone number is required
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="adhaarNumber" class="field-label">Adhaar Number *</label>
+          <input 
+            id="adhaarNumber" 
+            type="text" 
+            pInputText 
+            formControlName="adhaarNumber" 
+            placeholder="Enter Adhaar number"
+            class="form-input"
+          />
+          <small class="error-message" *ngIf="customerForm.get('adhaarNumber')?.invalid && customerForm.get('adhaarNumber')?.touched">
+            Adhaar number is required
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="address" class="field-label">Address *</label>
+          <textarea 
+            id="address" 
+            pInputTextarea 
+            formControlName="address" 
+            placeholder="Enter complete address"
+            class="form-textarea"
+            [rows]="3">
+          </textarea>
+          <small class="error-message" *ngIf="customerForm.get('address')?.invalid && customerForm.get('address')?.touched">
+            Address is required
+          </small>
+        </div>
+      </div>
+
+      <!-- Room Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="pi pi-home"></i>
+          Room Information
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-field">
+            <label for="roomNumber" class="field-label">Room Number *</label>
+            <input 
+              id="roomNumber" 
+              type="number" 
+              pInputText 
+              formControlName="roomNumber" 
+              placeholder="Enter room number"
+              class="form-input"
+            />
+            <small class="error-message" *ngIf="customerForm.get('roomNumber')?.invalid && customerForm.get('roomNumber')?.touched">
+              Room number is required
+            </small>
+          </div>
+          
+          <div class="form-field">
+            <label for="rent" class="field-label">Monthly Rent (₹) *</label>
+            <input 
+              id="rent" 
+              type="number" 
+              pInputText 
+              formControlName="rent" 
+              placeholder="Enter rent amount"
+              class="form-input"
+            />
+            <small class="error-message" *ngIf="customerForm.get('rent')?.invalid && customerForm.get('rent')?.touched">
+              Rent amount is required
+            </small>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="joiningDate" class="field-label">Joining Date *</label>
+          <p-calendar 
+            id="joiningDate" 
+            formControlName="joiningDate" 
+            dateFormat="yy-mm-dd"
+            placeholder="Select joining date"
+            class="form-calendar"
+            [showIcon]="true">
+          </p-calendar>
+          <small class="error-message" *ngIf="customerForm.get('joiningDate')?.invalid && customerForm.get('joiningDate')?.touched">
+            Joining date is required
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button 
+        pButton 
+        type="button" 
+        label="Cancel" 
+        class="p-button-secondary cancel-btn" 
+        (click)="closeDialog()">
+      </button>
+      <button 
+        pButton 
+        type="submit" 
+        [label]="isEdit ? 'Update Customer' : 'Add Customer'" 
+        [icon]="isEdit ? 'pi pi-check' : 'pi pi-plus'"
+        [disabled]="customerForm.invalid || isSubmitting"
+        class="submit-btn">
+      </button>
     </div>
   </form>
 </p-dialog>

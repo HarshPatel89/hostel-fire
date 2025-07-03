@@ -1,12 +1,13 @@
-
 .topbar {
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem 0 0;
-  background: #0d1321;
-  color: #ffffff;
+  background: #ffffff;
+  color: #2c3e50;
+  border-bottom: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   .topbar-left {
     display: flex;
@@ -18,7 +19,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #266dff 0%, #c516ff 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border: none;
       display: flex;
       align-items: center;
@@ -26,11 +27,23 @@
       color: #fff;
       cursor: pointer;
       font-size: 1.1rem;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
     }
 
     .brand {
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 700;
+      color: #2c3e50;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
   }
 
@@ -39,16 +52,18 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background: linear-gradient(90deg, #266dff 0%, #c516ff 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
       padding: 0.5rem 1rem;
       border-radius: 6px;
       text-decoration: none;
       font-weight: 500;
-      transition: opacity 0.15s ease;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 
       &:hover {
-        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
       }
     }
   }
