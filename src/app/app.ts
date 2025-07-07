@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Topbar } from './layout/topbar/topbar';
@@ -17,5 +16,9 @@ export class App {
 
   showSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
+  }
+
+  hideSidebar() {
+    this.sidebarVisible = false;
   }
 }

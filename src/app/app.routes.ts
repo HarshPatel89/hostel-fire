@@ -7,5 +7,5 @@ export const routes: Routes = [
   { path: 'register', loadComponent: () => import('./features/auth/register/register').then(m => m.RegisterComponent) },
   { path: 'home', loadComponent: () => import('./shared/dashboard/dashboard.component').then(m => m.DashboardComponent) },
   { path: 'rooms', loadChildren: () => import('./features/rooms/rooms.module').then(m => m.RoomsModule) },
-  { path: 'customers', loadChildren: () => import('./features/customers/customers.module').then(m => m.CustomersModule) },
+  { path: 'tenants', loadChildren: () => import('./features/customers/customers.module').then(m => m.CustomersModule) },
 ];

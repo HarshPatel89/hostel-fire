@@ -1,6 +1,5 @@
-
 <app-topbar (sidebarToggle)="showSidebar()"></app-topbar>
-<app-sidebar [visible]="sidebarVisible"></app-sidebar>
+<app-sidebar [visible]="sidebarVisible" (menuItemClicked)="hideSidebar()"></app-sidebar>
 
 <div class="main-content" [class.shifted]="sidebarVisible">
   <router-outlet></router-outlet>
